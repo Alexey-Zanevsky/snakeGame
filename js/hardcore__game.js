@@ -1,7 +1,7 @@
 'use strict';
 
 import { BaseGame } from './base__game.js';
-import { updateHighScore } from './script.js';
+import { updateHighScore } from '../script.js';
 /**
  * Class representing the hardcore game mode.
  * Extends the base game functionality with limited time.

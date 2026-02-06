@@ -1,7 +1,7 @@
 'use strict';
 
-// import { goToMenu} from './script.js';
-import { goToMenu, updateHighScore } from './script.js';
+// import { goToMenu} from '../script.js';
+import { goToMenu, updateHighScore } from '../script.js';
 
 
 /**
