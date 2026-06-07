@@ -347,139 +347,16 @@ export function goToMenu() {
     });
 }
 
-// const API = 'http://127.0.0.1:5501/auth';
-const API = '/auth';
-// const API = "https://snake-qlmv7zqyu-alexeys-projects-2c55db20.vercel.app"; 
-function getPayload() {
-  return {
-    nickname: document.getElementById('nickname').value,
-    password: document.getElementById('password').value
-  };
-}
+// Authorization removed for public demo version
 
-async function sendAuthRequest(endpoint) {
-  // console.log(`${API}/${endpoint}`);
-  // console.log(getPayload());
-  try {
-    const response = await fetch(`${API}/${endpoint}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(getPayload())
-    });
-
-    const contentType = response.headers.get('content-type');
-
-    if (contentType && contentType.includes('application/json')) {
-      const data = await response.json();
-      // console.log(data);
-
-      if (response.ok) {
-        console.log('Succes. Token:', data.token);
-        if (!isMuted) {
-          backgroundMusic.play();
-        }
-        localStorage.setItem('nickname', data.nickname);
-        localStorage.setItem('token', data.token);
-
-        document.querySelector(".span-nickname").textContent = `your nickname: ${data.nickname}`;
-        document.getElementById('auth-overlay').style.display = "none";
-        // Update the table every 10 minutes
-        setInterval(updateHardcoreRanking, 600000);
-      } else {
-        alert(data.message || 'Something went wrong');
-      }
-
-    } else {
-      const text = await response.text();
-      console.error('Server returned non-JSON response:', text);
-      alert('Error: the server did not return JSON. Check the URL and see if the server is running.');
-    }
-
-  } catch (error) {
-    console.error('Error:', error);
-    alert('Server is not responding');
-  }
-}
-
-document.getElementById('signup-btn').addEventListener('click', (e) => {
-  e.preventDefault();
-  sendAuthRequest('registration');
-});
-
-document.getElementById('login-btn').addEventListener('click', (e) => {
-  e.preventDefault();
-  sendAuthRequest('login');
-});
-
-// A function for sending a record update request
+// A function for sending a record update request (disabled in public demo)
 export async function updateHighScore(mode, difficulty, score) {
-  const token = localStorage.getItem('token');
-  // console.log(`UpdateHighScore script.js. mode: ${mode}, difficulty: ${difficulty}, score: ${score}, token: ${token}`);
-  try {
-    const response = await fetch(`${API}/score`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify({ mode, difficulty, score })
-    });
-    const data = await response.json();
-    // console.log(data);
-    if (data.newHighScore) {
-      const modal = document.querySelector(".gameOverModal");
-      const newHighScore = modal.querySelector("p");
-      newHighScore.textContent = "HEW HIGH SCORE!";
-    }
-  } catch (error) {
-    console.error('Request error:', error);
-  }
+  // Scores are not saved in this demo version
+  console.log(`Game mode: ${mode}, difficulty: ${difficulty}, score: ${score}`);
 }
 
-// 
-async function getRanking(mode, difficulty) {
-  try {
-    const response = await fetch(`${API}/ranking/${mode}/${difficulty}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      }
-    });
-
-    const ranking = await response.json();
-    // console.log('Ranking:', ranking);
-    return ranking;
-  } catch (error) {
-    console.error('Request error:', error);
-  }
-}
-
-// shows the table of the best players in the menu-rating
-async function displayRanking(mode, difficulty) {
-  const rankingData = await getRanking(mode, difficulty);
-  const tableBody = document.querySelector('.rating-table tbody');
-
-  tableBody.innerHTML = '';
-
-  rankingData.forEach(player => {
-    const row = document.createElement('tr');
-
-    let scoreField;
-    if (mode === 'hardcore') {
-      scoreField = 'hardcoreScore';
-    } else {
-      scoreField = `${mode}${difficulty.charAt(0).toUpperCase()}${difficulty.slice(1)}Score`;
-    }
-
-    const score = player[scoreField] !== undefined ? player[scoreField] : 0;
-    row.innerHTML = `<td>${player.nickname}</td><td>${score}</td>`;
-    tableBody.appendChild(row);
-  });
-}
-
-// Choosing the mode, difficulty level and snake skin in menu-rating
+// Ranking disabled in public demo (no database)
+// Choosing the mode, difficulty level and snake skin in menu-rating - demo version without ranking
 const gameModeSectionInRating = document.querySelectorAll('.menu-rating .game-mode-section .button-style');
 const levelSectionInRating = document.querySelectorAll('.menu-rating .level-section .button-style');
 let gameModeInRating;
@@ -499,8 +376,6 @@ gameModeSectionInRating.forEach(clickedButton => {
         gameLevelInRating = 'expert';
       })
     }
-    // console.log("gameModeInRating: " + gameModeInRating);
-    // console.log("gameLevelInRating: " + gameLevelInRating);
   });
 });
 
@@ -511,45 +386,18 @@ levelSectionInRating.forEach(clickedButton => {
     levelSectionInRating.forEach(btn => btn.classList.remove('active'));
     clickedButton.classList.add('active');
     gameLevelInRating = clickedButton.textContent.toLowerCase();
-    // console.log("gameLevelInRating: " + gameLevelInRating);
   });
 });
 
 document.getElementById('showTableBtn').addEventListener('click', () => {
   if (gameModeInRating != undefined && gameLevelInRating != undefined) {
-    displayRanking(gameModeInRating, gameLevelInRating);
+    // In demo version, just clear the table and show message
+    const tableBody = document.querySelector('.rating-table tbody');
+    if (tableBody) {
+      tableBody.innerHTML = '<tr><td colspan="2" style="text-align: center; padding: 10px;">No database in demo version</td></tr>';
+    }
     document.getElementById('gameModeSpan').textContent = `game mode: ${gameModeInRating}`;
     document.getElementById('gameLevelSpan').textContent = `game level: ${gameLevelInRating}`;
   }
 })
-
-//
-async function getHardcoreRanking() {
-  try {
-    const response = await fetch(`${API}/ranking/hardcore`, {
-      method: 'GET',
-      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-    });
-    return await response.json();
-  } catch (error) {
-    console.error('Ошибка загрузки рейтинга:', error);
-    return [];
-  }
-}
-
-async function updateHardcoreRanking() {
-  console.log("UpdateHardcoreRanking");
-  const rankingData = await getHardcoreRanking();
-  const tableBody = document.querySelector('.rating-table-hardcore tbody');
-
-  tableBody.innerHTML = '';
-
-  rankingData.forEach((player, index) => {
-    const row = document.createElement('tr');
-    row.innerHTML = `<td>${index + 1}</td><td>${player.nickname}</td><td>${player.hardcoreScore || 0}</td>`;
-    tableBody.appendChild(row);
-  });
-}
-
-updateHardcoreRanking();
 

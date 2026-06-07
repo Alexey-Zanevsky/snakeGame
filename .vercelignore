@@ -1,0 +1,9 @@
+docs/
+jscode/authController.js
+jscode/authRouter.js
+jscode/authMiddleware.js
+jscode/models/
+jscode/config.js
+jscode/server.js
+jscode/middleware/
+README.md
