@@ -1,4 +1,5 @@
 module.exports = {
-    secret: 'SECRET_KEY_RANDOM',
-    password: 'lesha_box24'
+    secret: process.env.JWT_SECRET,
+    password: process.env.DB_PASSWORD,
+    port: process.env.PORT || 3001
 };

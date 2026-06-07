@@ -340,7 +340,7 @@ export function goToMenu() {
 }
 
 // const API = 'http://127.0.0.1:5501/auth';
-const API = 'http://localhost:5000/auth';
+const API = 'http://localhost:3001/auth';
 // const API = "https://snake-qlmv7zqyu-alexeys-projects-2c55db20.vercel.app"; 
 function getPayload() {
     return {
