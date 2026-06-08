@@ -347,9 +347,8 @@ export function goToMenu() {
     });
 }
 
-// const API = 'http://127.0.0.1:5501/auth';
-const API = '/auth';
-// const API = "https://snake-qlmv7zqyu-alexeys-projects-2c55db20.vercel.app"; 
+const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const API = isLocalhost ? 'http://127.0.0.1:3001/auth' : '/auth';
 function getPayload() {
   return {
     nickname: document.getElementById('nickname').value,
