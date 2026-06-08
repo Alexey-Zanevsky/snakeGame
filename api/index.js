@@ -7,17 +7,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Serve static files from root
-app.use(express.static(path.join(__dirname, '..')));
-
 // Public demo version - no authentication or database
-// All endpoints return placeholder responses
 app.use('/auth', (req, res) => {
     res.status(200).json({ message: 'Demo mode - no authentication available' });
 });
 
-// Fallback to index.html for SPA
-app.get('*', (req, res) => {
+// Fallback to index.html
+app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'index.html'));
 });
 
