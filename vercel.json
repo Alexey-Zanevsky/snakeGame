@@ -12,8 +12,16 @@
             "dest": "api/index.js"
         },
         {
-            "src": "/(.*)",
+            "src": "/api/(.*)",
+            "dest": "api/index.js"
+        },
+        {
+            "src": "/(.*\\.(?:js|css|json|png|jpg|jpeg|gif|svg|mp4|mp3|woff|woff2|eot|ttf|html))",
             "dest": "/$1"
+        },
+        {
+            "src": "/.*",
+            "dest": "/index.html"
         }
     ]
 }
