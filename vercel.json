@@ -8,18 +8,8 @@
     ],
     "routes": [
         {
-            "src": "/auth/(.*)",
-            "dest": "api/index.js"
-        },
-        {
-            "src": "/(.*\\.(?:js|css|png|jpg|jpeg|gif|svg|mp4|mp3|woff|woff2|eot|ttf))",
-            "headers": {
-                "cache-control": "public, max-age=3600"
-            }
-        },
-        {
-            "src": "/.*",
-            "dest": "api/index.js"
+            "src": "/(.*)",
+            "dest": "/api/index.js"
         }
     ]
 }
