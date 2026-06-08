@@ -7,3 +7,6 @@ jscode/config.js
 jscode/server.js
 jscode/middleware/
 README.md
+.git
+.gitignore
+node_modules/
